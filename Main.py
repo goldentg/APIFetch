@@ -1,6 +1,8 @@
 import API.joke
 import API.spacex
 import API.numbersAPI
+import API.pokemon
+
 
 API.joke.getRandomJoke()
 
@@ -14,3 +16,19 @@ for name in dragon_names:
     print(name)
 
 print(f'On this day; {API.numbersAPI.onThisDay()}')
+
+
+randomPoke = API.pokemon.getRandomPokemon()
+pokeName = randomPoke['name']
+print(pokeName)
+
+# Get specific Pokémon
+pokemon = API.pokemon.getSpecificPokemon()  # Correct function call
+if isinstance(pokemon, dict):  # Ensure we have a valid response
+    pmonName = pokemon["name"]
+    pmonType = pokemon["types"][0]["type"]["name"]  # Access the first type correctly
+
+    print(f'Your Pokémon Name: {pmonName}')
+    print(f'Pokémon Type: {pmonType}')
+else:
+    print(pokemon)  # Print the error message if any

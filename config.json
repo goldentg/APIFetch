@@ -8,5 +8,12 @@
             "longitude": ""
         },
         "EPIC": false
+    },
+    "pokemon":{
+        "enable": false,
+        "SpecificPokemon":{
+            "enable": false,
+            "name": "charmander"
+        }
     }
 }
