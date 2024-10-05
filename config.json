@@ -1,0 +1,12 @@
+{
+    "nasa":{
+        "apiKey": "",
+        "APOD": false,
+        "Earth":{
+            "enable": false,
+            "latitude": "",
+            "longitude": ""
+        },
+        "EPIC": false
+    }
+}
