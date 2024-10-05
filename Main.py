@@ -1,5 +1,6 @@
 import API.joke
 import API.spacex
+import API.numbersAPI
 
 API.joke.getRandomJoke()
 
@@ -11,3 +12,5 @@ print('There are ' + str(len(active_dragons)) + ' in orbit')
 dragon_names = API.spacex.dragonNames()
 for name in dragon_names:
     print(name)
+
+print(f'On this day; {API.numbersAPI.onThisDay()}')
