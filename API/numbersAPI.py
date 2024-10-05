@@ -1,4 +1,3 @@
-#http://numbersapi.com/#42
 from datetime import datetime
 import requests
 

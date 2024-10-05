@@ -2,6 +2,7 @@ import API.joke
 import API.spacex
 import API.numbersAPI
 import API.pokemon
+import API.chuck
 
 
 API.joke.getRandomJoke()
@@ -20,7 +21,7 @@ print(f'On this day; {API.numbersAPI.onThisDay()}')
 
 randomPoke = API.pokemon.getRandomPokemon()
 pokeName = randomPoke['name']
-print(pokeName)
+print(f"Random Pokemon: {pokeName}")
 
 # Get specific Pokémon
 pokemon = API.pokemon.getSpecificPokemon()  # Correct function call
@@ -32,3 +33,6 @@ if isinstance(pokemon, dict):  # Ensure we have a valid response
     print(f'Pokémon Type: {pmonType}')
 else:
     print(pokemon)  # Print the error message if any
+
+
+print(f"Chuck Joke: {API.chuck.chuckJoke()}")

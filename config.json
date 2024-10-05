@@ -15,5 +15,17 @@
             "enable": false,
             "name": "charmander"
         }
+    },
+    "openWeather": {
+        "enable": false,
+        "apiKey": "",
+        "city": ""
+    },
+    "spacex": {
+        "dragonNames": false,
+        "nextLaunch": false
+    },
+    "chuck": {
+        "chuckJoke": false
     }
 }
