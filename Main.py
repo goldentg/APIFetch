@@ -3,6 +3,8 @@ import API.spacex
 import API.numbersAPI
 import API.pokemon
 import API.chuck
+import API.isUp
+import API.nasa
 
 
 API.joke.getRandomJoke()
@@ -36,3 +38,8 @@ else:
 
 
 print(f"Chuck Joke: {API.chuck.chuckJoke()}")
+
+if API.isUp:
+    print("Website is running")
+else:
+    print("Your website is down")

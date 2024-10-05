@@ -27,5 +27,9 @@
     },
     "chuck": {
         "chuckJoke": false
+    },
+    "WebsitePing": {
+        "enable": false,
+        "URL": "https://evannorman.ca"
     }
 }
