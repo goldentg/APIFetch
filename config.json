@@ -10,9 +10,9 @@
         "EPIC": false
     },
     "pokemon":{
-        "enable": false,
+        "enable": true,
         "SpecificPokemon":{
-            "enable": false,
+            "enable": true,
             "name": "charmander"
         }
     },
