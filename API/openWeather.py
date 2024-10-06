@@ -1,6 +1,8 @@
 import requests
 import json
 
+# This module is not done yet
+
 configPath = 'config.json'
 
 with open(configPath, 'r') as file:

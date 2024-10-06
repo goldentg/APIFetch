@@ -1,6 +1,6 @@
 # APIFetch
 
-A small CLI tool that allows various API connections.
+A small CLI tool that displays various data provided from APIs.
 
 ---
 
@@ -8,13 +8,50 @@ A small CLI tool that allows various API connections.
 
 **Note:** This project is currently in early development. Features and functionality are subject to change. Contributions and feedback are welcome!
 
+## Current Features
+- [x] Proxmox API
+  - [x] Display summary 
+- [x] Website Ping
+  - [x] Check the status of defined websites 
+- [x] NASA API
+  - [x] Image of the Day
+  - [x] Earth Imagery
+- [x] SpaceX API (API is out of date)
+  - [x] Next Launch
+  - [x] Dragon Capsules
+- [x] Joke API
+- [x] Coffee API
+- [x] Numbers API
+  - [x] On This Day
+- [x] Pokemon API
+  - [x] Random Pokemon
+  - [x] Pokemon by name
+- [x] Chuck Norris API 
+- [ ] Weather API (In Progress)
+  - [ ] Current Weather by City
+
+### Planned Features
+- [ ] UptimeKuma API
+- [ ] Device Ping
+- [ ] Dog API
+
+
+---
+
+
 ## Installation
 
 ```bash
+# Clone the repository
 git clone https://github.com/goldentg/APIFetch.git
 cd APIFetch
 
+# Install dependencies
 pip install -r requirements.txt
+
+# Configure the config.json file with your API keys/Customizations
+
+# Run the program
 python3 Main.py
 ```
 
