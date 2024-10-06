@@ -31,5 +31,8 @@
     "WebsitePing": {
         "enable": false,
         "URL": "https://evannorman.ca"
+    },
+    "coffee": {
+        "enable": false
     }
 }

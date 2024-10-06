@@ -5,6 +5,7 @@ import API.pokemon
 import API.chuck
 import API.isUp
 import API.nasa
+import API.coffee
 
 
 API.joke.getRandomJoke()
@@ -43,3 +44,5 @@ if API.isUp:
     print("Website is running")
 else:
     print("Your website is down")
+
+print(f"Coffee: {API.coffee.randomCoffee()}")
