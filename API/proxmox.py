@@ -30,6 +30,7 @@ class ProxmoxAPI:
 
             # Construct node status dictionary with relevant information
             # TODO: Add customizability
+            # Issue URL: https://github.com/goldentg/APIFetch/issues/1
 
             node_status = {
                 "name": node,
