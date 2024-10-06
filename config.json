@@ -10,9 +10,9 @@
         "EPIC": false
     },
     "pokemon":{
-        "enable": true,
+        "enable": false,
         "SpecificPokemon":{
-            "enable": true,
+            "enable": false,
             "name": "charmander"
         }
     },
@@ -22,8 +22,8 @@
         "city": ""
     },
     "spacex": {
-        "dragonNames": true,
-        "nextLaunch": true
+        "dragonNames": false,
+        "nextLaunch": false
     },
     "chuck": {
         "enable": true
@@ -36,6 +36,12 @@
     ]
     },
     "coffee": {
-        "enable": true
+        "enable": false
+    },
+    "proxmox": {
+        "enable": true,
+        "baseURL": "https://IPADDRESS:8006",
+        "tokenID": "",
+        "tokenSecret": ""
     }
 }

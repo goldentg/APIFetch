@@ -10,6 +10,7 @@ import API.chuck
 import API.isUp
 import API.nasa
 import API.coffee
+import API.proxmox
 
 # Initialize the console
 console = Console()
@@ -20,8 +21,6 @@ with open('config.json', 'r') as config_file:
 
 # Collect all panels to be displayed
 panels = []
-
-# Check and run modules based on config
 
 # Add a random joke panel if enabled in the config
 if config.get("joke", {}).get("enable", False):
@@ -37,17 +36,20 @@ if config.get("spacex", {}).get("dragonNames", False) or config.get("spacex", {}
             active_dragons = API.spacex.activeDragons()
             if isinstance(active_dragons, list):
                 dragon_names = API.spacex.dragonNames()
-                spacex_content += f'There are {len(active_dragons)} active dragons in orbit\n'
+                spacex_content += f'There are {len(active_dragons)} active dragons in orbit:\n'
                 spacex_content += "\n".join([f"- {name}" for name in dragon_names])
             else:
                 console.print(f"[red]Error fetching active dragons: {active_dragons}[/red]")
         except Exception as e:
-            console.print(f"[red]Exception occurred: {e}[/red]")
+            console.print(f"[red]Exception occurred while fetching dragons: {e}[/red]")
 
     # Add next SpaceX launch information if enabled in the config
     if config.get("spacex", {}).get("nextLaunch", False):
-        next_launch = API.spacex.nextLaunchUTC()
-        spacex_content += f'\nNext SpaceX launch is scheduled for: {next_launch}'
+        try:
+            next_launch = API.spacex.nextLaunchUTC()
+            spacex_content += f'\nNext SpaceX launch is scheduled for: {next_launch}'
+        except Exception as e:
+            spacex_content += f'\n[red]Error fetching next launch: {e}[/red]'
 
     panels.append(Panel(spacex_content, title="SpaceX", border_style="green"))
 
@@ -110,8 +112,52 @@ if config.get("nasa", {}).get("Earth", {}).get("enable", False):
         earthUrl = earthData.get("url", "No URL")
         earthContent = f"Date: {earthDate}\nImage URL: {earthUrl}"
     else:
-        earth_content = earthData
+        earthContent = earthData
     panels.append(Panel(earthContent, title="NASA Earth", border_style="green"))
 
+if config.get("proxmox", {}).get("enable", False):
+    proxmox = API.proxmox.ProxmoxAPI.from_config()
+    try:
+        nodes = proxmox.list_nodes()
+        if nodes:
+            node_name = nodes[0]['node']  # Use the first node name from the list
+            node_status = proxmox.get_node_status(node_name)
+
+            # Debug: print the node status to understand its structure
+            #print(json.dumps(node_status, indent=4))  # Temporary debug line
+
+            # Extracting relevant information with fallback values
+            cpu_util_percentage = node_status.get('cpu_util', 'N/A')
+            mem_util_percentage = node_status.get('mem_util', 'N/A')
+            disk_util_percentage = node_status.get('disk_util', 'N/A')
+            status = node_status.get('status', 'Unknown')
+
+            load_avg = node_status.get('loadavg', ['N/A', 'N/A', 'N/A'])
+            load_avg_str = ', '.join(map(str, load_avg))
+
+            uptime_seconds = node_status.get('uptime', 0)
+            uptime_hours = uptime_seconds // 3600
+
+            # Constructing content for Proxmox panel
+            proxmox_content = (
+                f"Node Name: {node_name}\n"
+                f"Status: {status}\n"
+                f"CPU Utilization: {cpu_util_percentage:.2f}%\n"
+                f"Memory Utilization: {mem_util_percentage:.2f}%\n"
+                f"Disk Utilization: {disk_util_percentage:.2f}%\n"
+                f"Load Average: {load_avg_str}\n"
+                f"Uptime: {uptime_hours} hours\n"
+                f"Kernel Version: {node_status.get('current-kernel', 'Unknown')}"
+            )
+        else:
+            proxmox_content = "No nodes available in Proxmox."
+    except Exception as e:
+        proxmox_content = f"Error fetching Proxmox node status: {e}"
+
+    panels.append(Panel(proxmox_content, title="Proxmox", border_style="green"))
+
 # Display all panels in columns
-console.print(Columns(panels))
+if panels:
+    console.print(Columns(panels))
+else:
+    console.print("[red]No information to display.[/red]")
