@@ -29,7 +29,7 @@ class ProxmoxAPI:
             status = "online" if uptime >= 1 else data.get("status", "Unknown")
 
             # Construct node status dictionary with relevant information
-            # TODO: Add customization functionality
+            # TODO: Add customizability
 
             node_status = {
                 "name": node,
