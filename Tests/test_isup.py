@@ -1,10 +1,11 @@
 import sys
 import os
 from unittest.mock import patch
-from API.isUp import isWebsiteUp, checkWebsites
 
 # Add the parent directory to the sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from API.isUp import isWebsiteUp, checkWebsites
 
 # Mock configuration data
 mock_config_data = {
