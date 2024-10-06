@@ -18,8 +18,5 @@ jobs:
       - name: Commit and Push Changes
         run: |
           git add .
-          if git diff-index --quiet HEAD --; then
-            echo "No changes to commit"
-          else
-            git commit -m "Automatically added GitHub issue links to TODOs"
-            git push origin main
+          git commit -m "Automatically added GitHub issue links to TODOs"
+          git push origin main
