@@ -22,17 +22,17 @@
         "city": ""
     },
     "spacex": {
-        "dragonNames": false,
-        "nextLaunch": false
+        "dragonNames": true,
+        "nextLaunch": true
     },
     "chuck": {
-        "chuckJoke": false
+        "chuckJoke": true
     },
     "WebsitePing": {
-        "enable": false,
+        "enable": true,
         "URL": "https://evannorman.ca"
     },
     "coffee": {
-        "enable": false
+        "enable": true
     }
 }
