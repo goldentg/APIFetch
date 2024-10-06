@@ -8,12 +8,16 @@ with open(configPath, 'r') as file:
     configData = json.load(file)
 
 
-def isWebsiteUp():
-    url = configData["WebsitePing"]["URL"]
-
-    response = requests.get(url)
-
-    if response.status_code == 200:
-        return True
-    else:
+def isWebsiteUp(url):
+    try:
+        response = requests.get(url)
+        return response.status_code == 200
+    except requests.RequestException:
         return False
+
+def checkWebsites():
+    urls = configData["WebsitePing"]["URLs"]
+    status = {}
+    for url in urls:
+        status[url] = isWebsiteUp(url)
+    return status

@@ -26,11 +26,14 @@
         "nextLaunch": true
     },
     "chuck": {
-        "chuckJoke": true
+        "enable": true
     },
     "WebsitePing": {
         "enable": true,
-        "URL": "https://evannorman.ca"
+        "URLs": [
+        "https://evannorman.ca",
+        "https://github.com"
+    ]
     },
     "coffee": {
         "enable": true
