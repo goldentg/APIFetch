@@ -27,8 +27,8 @@ A small CLI tool that displays various data provided from APIs.
   - [x] Random Pokemon
   - [x] Pokemon by name
 - [x] Chuck Norris API 
-- [ ] Weather API (In Progress)
-  - [ ] Current Weather by City
+- [x] Weather API (In Progress)
+  - [x] Current Weather by City
 
 ### Planned Features
 - [ ] UptimeKuma API

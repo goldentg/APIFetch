@@ -12,6 +12,7 @@ import API.nasa
 import API.coffee
 import API.proxmox
 import API.WeatherAPI
+from API.isUp import configData
 
 # Initialize the console
 console = Console()
@@ -25,7 +26,7 @@ panels = []
 
 # Add a random joke panel if enabled in the config
 if config.get("joke", {}).get("enable", False):
-    panels.append(Panel(API.joke.getRandomJoke(), title="Random Joke", border_style="green"))
+    panels.append(Panel(API.joke.getRandomJoke(), title="Random Joke", border_style="green", expand=False))
 
 # Add SpaceX information panel if any SpaceX options are enabled in the config
 if config.get("spacex", {}).get("dragonNames", False) or config.get("spacex", {}).get("nextLaunch", False):
@@ -56,7 +57,7 @@ if config.get("spacex", {}).get("dragonNames", False) or config.get("spacex", {}
 
 # Add "On This Day" information panel if enabled in the config
 if config.get("numbersAPI", {}).get("enable", False):
-    panels.append(Panel(f'On this day: {API.numbersAPI.onThisDay()}', title="On This Day", border_style="green"))
+    panels.append(Panel(f'On this day: {API.numbersAPI.onThisDay()}', title="On This Day", border_style="green", expand=False))
 
 # Add Pokemon information panel if any Pokemon options are enabled in the config
 if config.get("pokemon", {}).get("enable", False) or config["pokemon"].get("SpecificPokemon", {}).get("enable", False):
@@ -78,21 +79,21 @@ if config.get("pokemon", {}).get("enable", False) or config["pokemon"].get("Spec
         else:
             pokemon_content += f'{pokemon}\n'
 
-    panels.append(Panel(pokemon_content.strip(), title="Pokemon", border_style="green"))
+    panels.append(Panel(pokemon_content.strip(), title="Pokemon", border_style="green", expand=False))
 
 # Add a Chuck Norris joke panel if enabled in the config
 if config.get("chuck", {}).get("enable", False):
-    panels.append(Panel(f"Chuck Joke: {API.chuck.chuckJoke()}", title="Chuck Joke", border_style="green"))
+    panels.append(Panel(f"Chuck Joke: {API.chuck.chuckJoke()}", title="Chuck Joke", border_style="green", expand=False))
 
 # Add website status panel if enabled in the config
 if config.get("websiteStatus", {}).get("enable", False):
     websiteStatus = API.isUp.checkWebsites()
     statusContent = "\n".join([f"{url}: {'Up 🟢' if status else 'Down 🔴'}" for url, status in websiteStatus.items()])
-    panels.append(Panel(statusContent, title="Website Status", border_style="green"))
+    panels.append(Panel(statusContent, title="Website Status", border_style="green", expand=False))
 
 # Add a random coffee panel if enabled in the config
 if config.get("coffee", {}).get("enable", False):
-    panels.append(Panel(f"Coffee: {API.coffee.randomCoffee()}", title="Coffee", border_style="green"))
+    panels.append(Panel(f"Coffee: {API.coffee.randomCoffee()}", title="Coffee", border_style="green", expand=False))
 
 # Add NASA APOD panel if enabled in the config
 if config.get("nasa", {}).get("APOD", False):
@@ -103,7 +104,7 @@ if config.get("nasa", {}).get("APOD", False):
         apodContent = f"Title: {apodTitle}\nExplanation: {apodExplanation}"
     else:
         apodContent = apodData
-    panels.append(Panel(apodContent, title="NASA APOD", border_style="green"))
+    panels.append(Panel(apodContent, title="NASA APOD", border_style="green", expand=False))
 
 # Add NASA Earth panel if enabled in the config
 if config.get("nasa", {}).get("Earth", {}).get("enable", False):
@@ -114,7 +115,7 @@ if config.get("nasa", {}).get("Earth", {}).get("enable", False):
         earthContent = f"Date: {earthDate}\nImage URL: {earthUrl}"
     else:
         earthContent = earthData
-    panels.append(Panel(earthContent, title="NASA Earth", border_style="green"))
+    panels.append(Panel(earthContent, title="NASA Earth", border_style="green", expand=False))
 
 if config.get("proxmox", {}).get("enable", False):
     proxmox = API.proxmox.ProxmoxAPI.fromConfig()
@@ -154,7 +155,7 @@ if config.get("proxmox", {}).get("enable", False):
     except Exception as e:
         proxmoxContent = f"Error fetching Proxmox node status: {e}"
 
-    panels.append(Panel(proxmoxContent, title="Proxmox", border_style="green"))
+    panels.append(Panel(proxmoxContent, title="Proxmox", border_style="green", expand=False))
 
 # Add weather information panel if enabled in the config
 if config.get("openWeather", {}).get("enable", False):
@@ -164,20 +165,58 @@ if config.get("openWeather", {}).get("enable", False):
         cityName = weather["name"]
         weatherMain = weather["weather"][0]["main"]
         weatherDescription = weather["weather"][0]["description"]
-        weatherIcon = weather["weather"][0]["icon"]
-        weatherWindSpeed = weather["wind"]["speed"]
 
-        weatherContent = (
-            f"City: {cityName}\n"
-            f"Main: {weatherMain}\n"
-            f"Description: {weatherDescription}\n"
-            f"Wind Speed: {weatherWindSpeed} m/s\n"
-            f"Icon: {weatherIcon}"
-        )
+        # Convert from Kelvin to Celsius and Fahrenheit
+        weatherTempC = weather["main"]["temp"] - 273.15
+        weatherTempF = (weather["main"]["temp"] - 273.15) * 9/5 + 32
+
+        weatherTempMaxC = weather["main"]["temp_max"] - 273.15
+        weatherTempMaxF = (weather["main"]["temp_max"] - 273.15) * 9/5 + 32
+
+        weatherTempMinC = weather["main"]["temp_min"] - 273.15
+        weatherTempMinF = (weather["main"]["temp_min"] - 273.15) * 9/5 + 32
+
+        weatherFeelsLikeC = weather["main"]["feels_like"] - 273.15
+        weatherFeelsLikeF = (weather["main"]["feels_like"] - 273.15) * 9/5 + 32
+
+        weatherWindSpeed = weather["wind"]["speed"]
+        weatherWindSpeedMiles = weatherWindSpeed * 0.000621371
+
+        weatherPressure = weather["main"]["pressure"]
+        weatherHumidity = weather["main"]["humidity"]
+
+        # Check if the user wants the temperature in Celsius or Fahrenheit
+        if config.get("openWeather", {}).get("unit".lower()) == "metric":
+            weatherContent = (
+                f"City: {cityName}\n"
+                #f"Main: {weatherMain}\n"
+                f"Conditions: {weatherDescription}\n"
+                f"Temperature: {weatherTempC:.2f}°C\n"
+                #f"Max Temperature: {weatherTempMaxC:.2f}°C\n"
+                #f"Min Temperature: {weatherTempMinC:.2f}°C\n"
+                f"Feels Like: {weatherFeelsLikeC:.2f}°C\n"
+                f"Humidity: {weatherHumidity}%\n"
+                f"Wind Speed: {weatherWindSpeed} m/s\n"
+                f"Pressure: {weatherPressure} hPa"
+            )
+        else:
+            weatherContent = (
+                f"City: {cityName}\n"
+                #f"Main: {weatherMain}\n"
+                f"Conditions: {weatherDescription}\n"
+                f"Temperature: {weatherTempF:.2f}°F\n"
+                #f"Max Temperature: {weatherTempMaxF:.2f}°F\n"
+                #f"Min Temperature: {weatherTempMinF:.2f}°F\n"
+                f"Feels Like: {weatherFeelsLikeF:.2f}°F\n"
+                f"Humidity: {weatherHumidity}%\n"
+                f"Wind Speed: {weatherWindSpeedMiles:.2f} mph\n"
+                f"Pressure: {weatherPressure} hPa"
+            )
+
     else:
         weatherContent = weather  # Display the error message
 
-    panels.append(Panel(weatherContent, title="Weather", border_style="green"))
+    panels.append(Panel(weatherContent, title="Weather", border_style="green", expand=False))
 
 
 # Display all panels in columns

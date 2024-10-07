@@ -17,9 +17,10 @@
         }
     },
     "openWeather": {
-        "enable": false,
+        "enable": true,
         "apiKey": "",
-        "city": ""
+        "cityID": "5913490",
+        "unit": "metric"
     },
     "spacex": {
         "dragonNames": false,
