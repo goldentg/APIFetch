@@ -9,7 +9,7 @@ from API.isUp import isWebsiteUp, checkWebsites
 
 # Mock configuration data
 mock_config_data = {
-    "WebsitePing": {
+    "websiteStatus": {
         "URLs": [
             "http://google.com",
             "http://bing.com"

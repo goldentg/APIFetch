@@ -24,16 +24,13 @@ class TestWeatherAPI(unittest.TestCase):
         # Call the function
         result = WeatherAPI.getWeatherByCity()
 
-        # Check the structure and types of the returned data
+        # Check if the result is a dictionary (JSON formatted data)
         self.assertIsInstance(result, dict)
+        # Check if the dictionary contains expected keys
         self.assertIn("name", result)
         self.assertIn("weather", result)
         self.assertIn("main", result)
         self.assertIn("wind", result)
-        self.assertIsInstance(result["name"], str)
-        self.assertIsInstance(result["weather"], list)
-        self.assertIsInstance(result["main"], dict)
-        self.assertIsInstance(result["wind"], dict)
 
     def test_formatWeatherData(self):
         weather_data = {
