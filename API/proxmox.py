@@ -29,7 +29,7 @@ class ProxmoxAPI:
             status = "online" if uptime >= 1 else data.get("status", "Unknown")
 
             # Temporary debug line
-            print(json.dumps(data, indent=4))
+            # print(json.dumps(data, indent=4))
 
 
             # TODO: Add customizability
