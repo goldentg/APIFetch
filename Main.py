@@ -162,57 +162,8 @@ if config.get("openWeather", {}).get("enable", False):
     weather = API.WeatherAPI.getWeatherByCity()
 
     if isinstance(weather, dict):
-        cityName = weather["name"]
-        weatherMain = weather["weather"][0]["main"]
-        weatherDescription = weather["weather"][0]["description"]
-
-        # Convert from Kelvin to Celsius and Fahrenheit
-        weatherTempC = weather["main"]["temp"] - 273.15
-        weatherTempF = (weather["main"]["temp"] - 273.15) * 9/5 + 32
-
-        weatherTempMaxC = weather["main"]["temp_max"] - 273.15
-        weatherTempMaxF = (weather["main"]["temp_max"] - 273.15) * 9/5 + 32
-
-        weatherTempMinC = weather["main"]["temp_min"] - 273.15
-        weatherTempMinF = (weather["main"]["temp_min"] - 273.15) * 9/5 + 32
-
-        weatherFeelsLikeC = weather["main"]["feels_like"] - 273.15
-        weatherFeelsLikeF = (weather["main"]["feels_like"] - 273.15) * 9/5 + 32
-
-        weatherWindSpeed = weather["wind"]["speed"]
-        weatherWindSpeedMiles = weatherWindSpeed * 0.000621371
-
-        weatherPressure = weather["main"]["pressure"]
-        weatherHumidity = weather["main"]["humidity"]
-
-        # Check if the user wants the temperature in Celsius or Fahrenheit
-        if config.get("openWeather", {}).get("unit".lower()) == "metric":
-            weatherContent = (
-                f"City: {cityName}\n"
-                #f"Main: {weatherMain}\n"
-                f"Conditions: {weatherDescription}\n"
-                f"Temperature: {weatherTempC:.2f}°C\n"
-                #f"Max Temperature: {weatherTempMaxC:.2f}°C\n"
-                #f"Min Temperature: {weatherTempMinC:.2f}°C\n"
-                f"Feels Like: {weatherFeelsLikeC:.2f}°C\n"
-                f"Humidity: {weatherHumidity}%\n"
-                f"Wind Speed: {weatherWindSpeed} m/s\n"
-                f"Pressure: {weatherPressure} hPa"
-            )
-        else:
-            weatherContent = (
-                f"City: {cityName}\n"
-                #f"Main: {weatherMain}\n"
-                f"Conditions: {weatherDescription}\n"
-                f"Temperature: {weatherTempF:.2f}°F\n"
-                #f"Max Temperature: {weatherTempMaxF:.2f}°F\n"
-                #f"Min Temperature: {weatherTempMinF:.2f}°F\n"
-                f"Feels Like: {weatherFeelsLikeF:.2f}°F\n"
-                f"Humidity: {weatherHumidity}%\n"
-                f"Wind Speed: {weatherWindSpeedMiles:.2f} mph\n"
-                f"Pressure: {weatherPressure} hPa"
-            )
-
+        unit = config.get("openWeather", {}).get("unit".lower())
+        weatherContent = API.WeatherAPI.formatWeatherData(weather, unit)
     else:
         weatherContent = weather  # Display the error message
 
