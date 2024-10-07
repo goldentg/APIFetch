@@ -11,6 +11,7 @@ import API.isUp
 import API.nasa
 import API.coffee
 import API.proxmox
+import API.WeatherAPI
 
 # Initialize the console
 console = Console()
@@ -154,6 +155,30 @@ if config.get("proxmox", {}).get("enable", False):
         proxmoxContent = f"Error fetching Proxmox node status: {e}"
 
     panels.append(Panel(proxmoxContent, title="Proxmox", border_style="green"))
+
+# Add weather information panel if enabled in the config
+if config.get("openWeather", {}).get("enable", False):
+    weather = API.WeatherAPI.getWeatherByCity()
+
+    if isinstance(weather, dict):
+        cityName = weather["name"]
+        weatherMain = weather["weather"][0]["main"]
+        weatherDescription = weather["weather"][0]["description"]
+        weatherIcon = weather["weather"][0]["icon"]
+        weatherWindSpeed = weather["wind"]["speed"]
+
+        weatherContent = (
+            f"City: {cityName}\n"
+            f"Main: {weatherMain}\n"
+            f"Description: {weatherDescription}\n"
+            f"Wind Speed: {weatherWindSpeed} m/s\n"
+            f"Icon: {weatherIcon}"
+        )
+    else:
+        weatherContent = weather  # Display the error message
+
+    panels.append(Panel(weatherContent, title="Weather", border_style="green"))
+
 
 # Display all panels in columns
 if panels:
