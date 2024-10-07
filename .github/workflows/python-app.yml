@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
 
 env:
-  PYTHONPATH: {{github.workspace}}
+  PYTHONPATH: .
 
 permissions:
   contents: read
