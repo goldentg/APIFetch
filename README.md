@@ -27,7 +27,7 @@ A small CLI tool that displays various data provided from APIs.
   - [x] Random Pokemon
   - [x] Pokemon by name
 - [x] Chuck Norris API 
-- [x] Weather API (In Progress)
+- [x] Weather API
   - [x] Current Weather by City
 
 ### Planned Features
@@ -35,6 +35,10 @@ A small CLI tool that displays various data provided from APIs.
 - [ ] Device Ping
 - [ ] Dog API
 
+
+## Demo
+The following is a very early example of the current functionality of the program (Taken: Oct 7 2024). This will be updated as more features are added.
+![APIFetch Demo](.github/Oct%207%20Demo.png)
 
 ---
 
