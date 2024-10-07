@@ -43,5 +43,8 @@
         "baseURL": "https://IPADDRESS:8006",
         "tokenID": "",
         "tokenSecret": ""
+    },
+    "numbersAPI": {
+        "enable": true
     }
 }
