@@ -28,7 +28,7 @@
     "chuck": {
         "enable": true
     },
-    "WebsitePing": {
+    "websiteStatus": {
         "enable": true,
         "URLs": [
         "https://evannorman.ca",

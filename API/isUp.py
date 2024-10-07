@@ -16,7 +16,7 @@ def isWebsiteUp(url):
         return False
 
 def checkWebsites():
-    urls = configData["WebsitePing"]["URLs"]
+    urls = configData["websiteStatus"]["URLs"]
     status = {}
     for url in urls:
         status[url] = isWebsiteUp(url)

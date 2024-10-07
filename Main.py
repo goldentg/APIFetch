@@ -84,10 +84,10 @@ if config.get("chuck", {}).get("enable", False):
     panels.append(Panel(f"Chuck Joke: {API.chuck.chuckJoke()}", title="Chuck Joke", border_style="green"))
 
 # Add website status panel if enabled in the config
-if config.get("WebsitePing", {}).get("enable", False):
-    website_statuses = API.isUp.checkWebsites()
-    status_content = "\n".join([f"{url}: {'🟢' if status else '🔴'}" for url, status in website_statuses.items()])
-    panels.append(Panel(status_content, title="Website Status", border_style="green"))
+if config.get("websiteStatus", {}).get("enable", False):
+    websiteStatus = API.isUp.checkWebsites()
+    statusContent = "\n".join([f"{url}: {'Up 🟢' if status else 'Down 🔴'}" for url, status in websiteStatus.items()])
+    panels.append(Panel(statusContent, title="Website Status", border_style="green"))
 
 # Add a random coffee panel if enabled in the config
 if config.get("coffee", {}).get("enable", False):
@@ -120,41 +120,41 @@ if config.get("proxmox", {}).get("enable", False):
     try:
         nodes = proxmox.list_nodes()
         if nodes:
-            node_name = nodes[0]['node']  # Use the first node name from the list
-            node_status = proxmox.get_node_status(node_name)
+            nodeName = nodes[0]['node']  # Use the first node name from the list
+            nodeStatus = proxmox.get_node_status(nodeName)
 
             # Debug: print the node status to understand its structure
-            #print(json.dumps(node_status, indent=4))  # Temporary debug line
+            #print(json.dumps(nodeStatus, indent=4))  # Temporary debug line
 
             # Extracting relevant information with fallback values
-            cpu_util_percentage = node_status.get('cpu_util', 'N/A')
-            mem_util_percentage = node_status.get('mem_util', 'N/A')
-            disk_util_percentage = node_status.get('disk_util', 'N/A')
-            status = node_status.get('status', 'Unknown')
+            cpuUtilPercentage = nodeStatus.get('cpu_util', 'N/A')
+            memUtilPercentage = nodeStatus.get('mem_util', 'N/A')
+            diskUtilPercentage = nodeStatus.get('disk_util', 'N/A')
+            status = nodeStatus.get('status', 'Unknown')
 
-            load_avg = node_status.get('loadavg', ['N/A', 'N/A', 'N/A'])
-            load_avg_str = ', '.join(map(str, load_avg))
+            loadAvg = nodeStatus.get('loadavg', ['N/A', 'N/A', 'N/A'])
+            loadAvgStr = ', '.join(map(str, loadAvg))
 
-            uptime_seconds = node_status.get('uptime', 0)
-            uptime_hours = uptime_seconds // 3600
+            uptimeSeconds = nodeStatus.get('uptime', 0)
+            uptimeHours = uptimeSeconds // 3600
 
             # Constructing content for Proxmox panel
-            proxmox_content = (
-                f"Node Name: {node_name}\n"
+            proxmoxContent = (
+                f"Node Name: {nodeName}\n"
                 f"Status: {status}\n"
-                f"CPU Utilization: {cpu_util_percentage:.2f}%\n"
-                f"Memory Utilization: {mem_util_percentage:.2f}%\n"
-                f"Disk Utilization: {disk_util_percentage:.2f}%\n"
-                f"Load Average: {load_avg_str}\n"
-                f"Uptime: {uptime_hours} hours\n"
-                f"Kernel Version: {node_status.get('current-kernel', 'Unknown')}"
+                f"CPU Utilization: {cpuUtilPercentage:.2f}%\n"
+                f"Memory Utilization: {memUtilPercentage:.2f}%\n"
+                f"Disk Utilization: {diskUtilPercentage:.2f}%\n"
+                f"Load Average: {loadAvgStr}\n"
+                f"Uptime: {uptimeHours} hours\n"
+                f"Kernel Version: {nodeStatus.get('current-kernel', 'Unknown')}"
             )
         else:
-            proxmox_content = "No nodes available in Proxmox."
+            proxmoxContent = "No nodes available in Proxmox."
     except Exception as e:
-        proxmox_content = f"Error fetching Proxmox node status: {e}"
+        proxmoxContent = f"Error fetching Proxmox node status: {e}"
 
-    panels.append(Panel(proxmox_content, title="Proxmox", border_style="green"))
+    panels.append(Panel(proxmoxContent, title="Proxmox", border_style="green"))
 
 # Display all panels in columns
 if panels:
