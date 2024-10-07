@@ -17,7 +17,7 @@
         }
     },
     "openWeather": {
-        "enable": true,
+        "enable": false,
         "apiKey": "",
         "cityID": "5913490",
         "unit": "metric"
