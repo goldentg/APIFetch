@@ -45,9 +45,7 @@ class ProxmoxAPI:
                 # Convert to percentage
                 "loadAvg": [float(x) for x in data.get("loadavg", [0, 0, 0])],  # Convert to float
                 "uptime": data.get("uptime", 0),
-                "currentKernel": data.get("current-kernel", {}).get("version", "Unknown"),
-                "netUpSpeed": data.get("netin", 0),  # Network up speed
-                "netDownSpeed": data.get("netout", 0)  # Network down speed
+                "currentKernel": data.get("current-kernel", {}).get("version", "Unknown")
             }
             return nodeStatus
         else:
