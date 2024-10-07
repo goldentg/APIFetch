@@ -28,23 +28,26 @@ class ProxmoxAPI:
             uptime = data.get("uptime", 0)
             status = "online" if uptime >= 1 else data.get("status", "Unknown")
 
-            # Construct node status dictionary with relevant information
+            # Temporary debug line
+            print(json.dumps(data, indent=4))
+
+
             # TODO: Add customizability
             # Issue URL: https://github.com/goldentg/APIFetch/issues/1
 
+            # Construct node status dictionary with relevant information
             nodeStatus = {
                 "name": node,
                 "status": status,
-                "cpuUtil": data.get("cpu") * 100 if data.get("cpu") is not None else None,  # Convert to percentage
-                "memUtil": (data.get("memory", {}).get("used") / data.get("memory", {}).get(
-                    "total")) * 100 if data.get("memory", {}).get("used") is not None and data.get("memory", {}).get(
-                    "total") is not None else None,  # Convert to percentage
-                "diskUtil": (data.get("rootfs", {}).get("used") / data.get("rootfs", {}).get(
-                    "total")) * 100 if data.get("rootfs", {}).get("used") is not None and data.get("rootfs", {}).get(
-                    "total") is not None else None,  # Convert to percentage
-                "loadAvg": data.get("loadavg", ['N/A', 'N/A', 'N/A']),
-                "uptime": data.get("uptime"),
-                "currentKernel": data.get("current-kernel", {}).get("version", "Unknown")
+                "cpuUtil": float(data.get("cpu", 0)) * 100,  # Convert to percentage
+                "memUtil": (data["memory"]["used"] / data["memory"]["total"]) * 100,  # Convert to percentage
+                "diskUtil": (data.get("rootfs", {}).get("used", 0) / data.get("rootfs", {}).get("total", 1)) * 100,
+                # Convert to percentage
+                "loadAvg": [float(x) for x in data.get("loadavg", [0, 0, 0])],  # Convert to float
+                "uptime": data.get("uptime", 0),
+                "currentKernel": data.get("current-kernel", {}).get("version", "Unknown"),
+                "netUpSpeed": data.get("netin", 0),  # Network up speed
+                "netDownSpeed": data.get("netout", 0)  # Network down speed
             }
             return nodeStatus
         else:

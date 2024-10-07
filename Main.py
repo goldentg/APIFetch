@@ -116,23 +116,22 @@ if config.get("nasa", {}).get("Earth", {}).get("enable", False):
     panels.append(Panel(earthContent, title="NASA Earth", border_style="green"))
 
 if config.get("proxmox", {}).get("enable", False):
-    proxmox = API.proxmox.ProxmoxAPI.from_config()
+    proxmox = API.proxmox.ProxmoxAPI.fromConfig()
     try:
-        nodes = proxmox.list_nodes()
+        nodes = proxmox.listNodes()
         if nodes:
             nodeName = nodes[0]['node']  # Use the first node name from the list
-            nodeStatus = proxmox.get_node_status(nodeName)
-
-            # Debug: print the node status to understand its structure
-            #print(json.dumps(nodeStatus, indent=4))  # Temporary debug line
+            nodeStatus = proxmox.getNodeStatus(nodeName)
 
             # Extracting relevant information with fallback values
-            cpuUtilPercentage = nodeStatus.get('cpu_util', 'N/A')
-            memUtilPercentage = nodeStatus.get('mem_util', 'N/A')
-            diskUtilPercentage = nodeStatus.get('disk_util', 'N/A')
-            status = nodeStatus.get('status', 'Unknown')
+            cpuUtilPercentage = float(nodeStatus.get('cpuUtil', 0))  # Ensure it's a float
+            memUtilPercentage = nodeStatus.get("memUtil", 0)
+            diskUtilPercentage = nodeStatus.get("diskUtil", 0)
+            status = "online" if nodeStatus.get('uptime', 0) >= 1 else nodeStatus.get('status', 'Unknown')
+            kernel = nodeStatus.get("currentKernel", "Unknown")
 
-            loadAvg = nodeStatus.get('loadavg', ['N/A', 'N/A', 'N/A'])
+
+            loadAvg = nodeStatus.get('loadAvg', ['N/A', 'N/A', 'N/A'])
             loadAvgStr = ', '.join(map(str, loadAvg))
 
             uptimeSeconds = nodeStatus.get('uptime', 0)
@@ -147,7 +146,7 @@ if config.get("proxmox", {}).get("enable", False):
                 f"Disk Utilization: {diskUtilPercentage:.2f}%\n"
                 f"Load Average: {loadAvgStr}\n"
                 f"Uptime: {uptimeHours} hours\n"
-                f"Kernel Version: {nodeStatus.get('current-kernel', 'Unknown')}"
+                f"Kernel Version: {kernel}"
             )
         else:
             proxmoxContent = "No nodes available in Proxmox."
