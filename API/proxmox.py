@@ -31,7 +31,6 @@ class ProxmoxAPI:
             # Temporary debug line
             # print(json.dumps(data, indent=4))
 
-
             # TODO: Add customizability
             # Issue URL: https://github.com/goldentg/APIFetch/issues/1
 
@@ -59,3 +58,37 @@ class ProxmoxAPI:
             return response.json()['data']
         else:
             response.raise_for_status()
+
+    def getFormattedNodeStatus(self):
+        nodes = self.listNodes()
+        if nodes:
+            nodeName = nodes[0]['node']  # Use the first node name from the list
+            nodeStatus = self.getNodeStatus(nodeName)
+
+            # Extracting relevant information with fallback values
+            cpuUtilPercentage = float(nodeStatus.get('cpuUtil', 0))  # Ensure it's a float
+            memUtilPercentage = nodeStatus.get("memUtil", 0)
+            diskUtilPercentage = nodeStatus.get("diskUtil", 0)
+            status = "online" if nodeStatus.get('uptime', 0) >= 1 else nodeStatus.get('status', 'Unknown')
+            kernel = nodeStatus.get("currentKernel", "Unknown")
+
+            loadAvg = nodeStatus.get('loadAvg', ['N/A', 'N/A', 'N/A'])
+            loadAvgStr = ', '.join(map(str, loadAvg))
+
+            uptimeSeconds = nodeStatus.get('uptime', 0)
+            uptimeHours = uptimeSeconds // 3600
+
+            # Constructing content for Proxmox panel
+            proxmoxContent = (
+                f"Node Name: {nodeName}\n"
+                f"Status: {status}\n"
+                f"CPU Utilization: {cpuUtilPercentage:.2f}%\n"
+                f"Memory Utilization: {memUtilPercentage:.2f}%\n"
+                f"Disk Utilization: {diskUtilPercentage:.2f}%\n"
+                f"Load Average: {loadAvgStr}\n"
+                f"Uptime: {uptimeHours} hours\n"
+                f"Kernel Version: {kernel}"
+            )
+        else:
+            proxmoxContent = "No nodes available in Proxmox."
+        return proxmoxContent
