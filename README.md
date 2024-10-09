@@ -34,7 +34,10 @@ A small CLI tool that displays various data provided from APIs.
 - [ ] UptimeKuma API
 - [ ] GitHub API
 - [ ] YouTube API
-- [ ] 
+- [ ] Jellyfin API
+- [ ] Plex API
+- [ ] RSS
+- [ ] Ollama query
 - [ ] Device Ping
 - [ ] Dog API
 
