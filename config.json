@@ -45,6 +45,12 @@
         "tokenID": "",
         "tokenSecret": ""
     },
+    "jellyfin": {
+        "enable": true,
+        "baseUrl": "http://IPADDRESS:8096",
+        "apiKey": "",
+        "userId": ""
+    },
     "numbersAPI": {
         "enable": true
     }

@@ -11,6 +11,7 @@ import API.isUp
 import API.nasa
 import API.coffee
 import API.proxmox
+import API.jellyfin
 import API.WeatherAPI
 import textwrap
 
@@ -40,7 +41,16 @@ def main():
 
         panels.append(Panel(proxmoxContent, title="Proxmox", border_style="green", expand=True))
 
+    if config.get("jellyfin", {}).get("enable", False):
+        jellyfin = API.jellyfin.JellyfinAPI(config)
+        try:
+            mediaCount = f"Total Media: {jellyfin.getTotalMediaCount()}"
+            jellyfinContent = jellyfin.getFormattedMediaCounts()
+            jellyfinContent += f"\n{mediaCount}"
+        except Exception as e:
+            jellyfinContent = f"Error fetching Jellyfin library: {e}"
 
+        panels.append(Panel(jellyfinContent, title="Jellyfin", border_style="green", expand=True))
 
     # Add weather information panel if enabled in the config
     if config.get("openWeather", {}).get("enable", False):
