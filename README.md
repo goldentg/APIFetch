@@ -32,6 +32,7 @@ A small CLI tool that displays various data provided from APIs.
 
 ### Planned Features
 - [ ] UptimeKuma API
+- [ ] FloatPlane
 - [ ] GitHub API
 - [ ] Lastfm API
 - [ ] YouTube API
